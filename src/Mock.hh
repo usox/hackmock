@@ -1,9 +1,10 @@
 <?hh // strict
 namespace Usox\HackMock;
 
+use Facebook\HackCodegen\CodegenClass;
 use Facebook\HackCodegen\HackCodegenFactory;
 use Facebook\HackCodegen\HackCodegenConfig;
-use HH\Lib\Str;
+use HH\Lib\{Str, Dict};
 
 final class Mock<TC> implements MockInterface {
 
@@ -32,7 +33,7 @@ final class Mock<TC> implements MockInterface {
 			\spl_object_hash($this)
 		);
 
-		$methods = [];
+		$methods = dict($rfl->getMethods());
 
 		$class = $this->code_generator->codegenClass($mock_name)
 			->addInterface(
@@ -41,35 +42,67 @@ final class Mock<TC> implements MockInterface {
 			->addEmptyUserAttribute('__MockClass');
 
 		foreach ($this->expectations as $expectation) {
-			
-			$class->addMethod(
-				$this->code_generator->codegenMethod(
-					$expectation->getMethodName()
-				)
-				->addParameter('mixed ...$params')
-				->setReturnType(
-					$expectation->getReturnType()
-				)
-				->setBodyf(
-					'return \%s::getRegistry()[\'%s\'];',
-					__CLASS__,
-					$expectation->getMethodName()
-				)
+			$this->addMethod($class, $expectation);
+
+			$methods = Dict\filter(
+				$methods,
+				$value ==> $value->getName() !== $expectation->getMethodName()
 			);
 		}
 
-		$file = $this->code_generator->codegenFile('')
-			->addClass($class)
-			->render();
+		$this->addStubsForRemainingMethods($class, $methods);
 
-		$file = Str\replace($file, '<?hh // strict', '');
 		// UNSAFE
-		eval($file);
+		eval($class->render());
 
 		return new $mock_name();
 	}
 
 	public static function getRegistry(): Map<string, mixed> {
 		return static::$registry;
+	}
+
+	private function evaluate(string $class): void {
+
+	}
+
+	private function addMethod(CodegenClass $class, ExpectationInterface $expectation): void {
+		$class->addMethod(
+			$this->code_generator->codegenMethod(
+				$expectation->getMethodName()
+			)
+			->addParameter('mixed ...$params')
+			->setReturnType(
+				$expectation->getReturnType()
+			)
+			->setBodyf(
+				'return \%s::getRegistry()[\'%s\'];',
+				__CLASS__,
+				$expectation->getMethodName()
+			)
+		);
+	}
+
+	private function addStubsForRemainingMethods(
+		CodegenClass $class,
+		dict<int, \ReflectionMethod> $methods
+	): void {
+		foreach ($methods as $method) {
+			$return_type = 'mixed';
+			if ($method->hasReturnType()) {
+				$return_type = (string) $method->getReturnType();
+			}
+
+			$class->addMethod(
+				$this->code_generator->codegenMethod(
+					$method->getName()
+				)
+				->addParameter('mixed ...$params')
+				->setReturnType($return_type)
+				->setBodyf(
+					'return;'
+				)
+			);
+		}
 	}
 }
