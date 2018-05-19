@@ -69,8 +69,7 @@ final class Mock<TC> implements MockInterface {
 			->addClass($class)
 			->render();
 
-		$file = \str_replace('<?hh // strict','', $file);
-		\var_dump($file);
+		$file = Str\replace($file, '<?hh // strict', '');
 		// UNSAFE
 		eval($file);
 
