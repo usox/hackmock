@@ -15,6 +15,4 @@ interface ExpectationInterface {
 	public function getMethodName(): string;
 
 	public function getReturnType(): string;
-
-	public function getReturnValue(): string;
 }

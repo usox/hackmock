@@ -54,6 +54,7 @@ final class Mock<TC> implements MockInterface {
 				$this->code_generator->codegenMethod(
 					$expectation->getMethodName()
 				)
+				->addParameter('mixed ...$params')
 				->setReturnType(
 					$expectation->getReturnType()
 				)
