@@ -1,4 +1,4 @@
-<?hh // partial
+<?hh // strict
 namespace Usox\HackMock;
 
 use Facebook\HackCodegen\HackCodegenFactory;
