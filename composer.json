@@ -1,0 +1,37 @@
+{
+    "name": "usox/hackmock",
+    "type": "library",
+    "description": "Mocking framework for hacklang",
+    "keywords": [
+        "hack",
+        "mock",
+        "hacklang",
+        "hhvm",
+        "testing"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/usox/hackmock",
+    "authors": [
+        {
+            "name": "Daniel Jakob",
+            "email": "dev@usox.org",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "hhvm": ">=3.26",
+        "facebook/definition-finder": "^1.7",
+        "facebook/hack-codegen": "^3",
+        "hhvm/hsl": "^1"
+    },
+    "require-dev": {
+        "facebook/fbexpect": "^1",
+        "mockery/mockery": "^1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Usox\\HackMock\\": "src/",
+            "Usox\\Fickel\\": "tests/"
+        }
+    }
+}

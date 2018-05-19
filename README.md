@@ -1,0 +1,3 @@
+[![Build Status](https://travis-ci.org/usox/hackmock.svg?branch=master)](https://travis-ci.org/usox/hackmock)
+
+# Testing...
