@@ -20,7 +20,6 @@
     ],
     "require": {
         "hhvm": ">=3.26.0",
-        "facebook/definition-finder": "^1.7",
         "facebook/hack-codegen": "^3.0.7",
         "hhvm/hsl": "^1.0.0|^3.26.0"
     },

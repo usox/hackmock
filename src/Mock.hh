@@ -3,7 +3,6 @@ namespace Usox\HackMock;
 
 use Facebook\HackCodegen\HackCodegenFactory;
 use Facebook\HackCodegen\HackCodegenConfig;
-use Facebook\DefinitionFinder\FileParser;
 use HH\Lib\Str;
 
 final class Mock<TC> implements MockInterface {
@@ -26,13 +25,6 @@ final class Mock<TC> implements MockInterface {
 
 	public function build(): TC {
 		$rfl = new \ReflectionClass($this->interface_name);
-
-		$path = $rfl->getFileName();
-		if ($path === false) {
-			throw new \Exception('file not found');
-		}
-
-		$parser = FileParser::FromFile(\realpath($path));
 
 		$mock_name = Str\format(
 			'%s_Implementation%s',
