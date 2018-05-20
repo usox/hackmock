@@ -39,20 +39,15 @@ final class Mock<TC> implements MockInterface {
 			)
 			->addEmptyUserAttribute('__MockClass');
 
-		foreach ($rfl->getMethods() as $method) {
+			foreach ($rfl->getMethods() as $method) {
 			$method_name = $method->getName();
 
-			if (C\contains_key($this->expectations, $method_name)) {
-				$this->addMethod($class, $this->expectations[$method_name]);
-				continue;
-			}
 			$gen_method = $this
 				->code_generator
-				->codegenMethod($method_name)
-				->setReturnType('mixed')
-				->setBodyf(
-					'return null;'
-				);
+				->codegenMethod(
+					$method_name
+				)
+				->setReturnType('mixed');
 
 			foreach ($method->getParameters() as $parameter) {
 				$gen_method->addParameterf(
@@ -63,7 +58,23 @@ final class Mock<TC> implements MockInterface {
 			}
 
 			$class->addMethod($gen_method);
+
+			if (C\contains_key($this->expectations, $method_name)) {
+				$expectation = $this->expectations[$method_name];
+
+				$gen_method->setBodyf(
+					'return \%s::getRegistry()[\'%s\'] ?? null;',
+					__CLASS__,
+					$expectation->getMethodName()
+				);
+
+				continue;
+			}
+			$gen_method->setBodyf(
+				'return null;'
+			);
 		}
+
 
 		// UNSAFE
 		eval($class->render());
