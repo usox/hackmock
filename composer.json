@@ -21,7 +21,8 @@
     "require": {
         "hhvm": ">=3.26.0",
         "facebook/hack-codegen": "^3.0.7",
-        "hhvm/hsl": "^1.0.0|^3.26.0"
+        "hhvm/hsl": "^1.0.0|^3.26.0",
+        "hhvm/type-assert": "^3.2"
     },
     "require-dev": {
         "facebook/fbexpect": "^1"

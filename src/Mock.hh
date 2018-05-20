@@ -4,11 +4,11 @@ namespace Usox\HackMock;
 use Facebook\HackCodegen\CodegenClass;
 use Facebook\HackCodegen\HackCodegenFactory;
 use Facebook\HackCodegen\HackCodegenConfig;
-use HH\Lib\{Str, Dict};
+use HH\Lib\{Str, Dict, C};
 
 final class Mock<TC> implements MockInterface {
 
-	private Vector<ExpectationInterface> $expectations = Vector{};
+	private dict<string, ExpectationInterface> $expectations = dict[];
 
 	private HackCodegenFactory $code_generator;
 
@@ -20,7 +20,7 @@ final class Mock<TC> implements MockInterface {
 
 	public function expects(string $method_name): ExpectationInterface {
 		$expectation = new Expectation($method_name);
-		$this->expectations->add($expectation);
+		$this->expectations[$method_name] = $expectation;
 		return $expectation;
 	}
 
@@ -33,24 +33,37 @@ final class Mock<TC> implements MockInterface {
 			\spl_object_hash($this)
 		);
 
-		$methods = dict($rfl->getMethods());
-
 		$class = $this->code_generator->codegenClass($mock_name)
 			->addInterface(
 				$this->code_generator->codegenImplementsInterface($rfl->getName())
 			)
 			->addEmptyUserAttribute('__MockClass');
 
-		foreach ($this->expectations as $expectation) {
-			$this->addMethod($class, $expectation);
+		foreach ($rfl->getMethods() as $method) {
+			$method_name = $method->getName();
 
-			$methods = Dict\filter(
-				$methods,
-				$value ==> $value->getName() !== $expectation->getMethodName()
-			);
+			if (C\contains_key($this->expectations, $method_name)) {
+				$this->addMethod($class, $this->expectations[$method_name]);
+				continue;
+			}
+			$gen_method = $this
+				->code_generator
+				->codegenMethod($method_name)
+				->setReturnType('mixed')
+				->setBodyf(
+					'return null;'
+				);
+
+			foreach ($method->getParameters() as $parameter) {
+				$gen_method->addParameterf(
+					'%s $%s',
+					$parameter->getTypehintText(),
+					$parameter->getName(),
+				);
+			}
+
+			$class->addMethod($gen_method);
 		}
-
-		$this->addStubsForRemainingMethods($class, $methods);
 
 		// UNSAFE
 		eval($class->render());
@@ -60,10 +73,6 @@ final class Mock<TC> implements MockInterface {
 
 	public static function getRegistry(): Map<string, mixed> {
 		return static::$registry;
-	}
-
-	private function evaluate(string $class): void {
-
 	}
 
 	private function addMethod(CodegenClass $class, ExpectationInterface $expectation): void {
@@ -81,28 +90,5 @@ final class Mock<TC> implements MockInterface {
 				$expectation->getMethodName()
 			)
 		);
-	}
-
-	private function addStubsForRemainingMethods(
-		CodegenClass $class,
-		dict<int, \ReflectionMethod> $methods
-	): void {
-		foreach ($methods as $method) {
-			$return_type = 'mixed';
-			if ($method->hasReturnType()) {
-				$return_type = (string) $method->getReturnType();
-			}
-
-			$class->addMethod(
-				$this->code_generator->codegenMethod(
-					$method->getName()
-				)
-				->addParameter('mixed ...$params')
-				->setReturnType($return_type)
-				->setBodyf(
-					'return;'
-				)
-			);
-		}
 	}
 }
