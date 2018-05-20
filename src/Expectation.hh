@@ -14,20 +14,25 @@ final class Expectation implements ExpectationInterface {
 	}
 
 	public function times(int $times_called): this {
-		// TBD implements `times
+		// TODO implement times
 		return $this;
 	}
 
 	public function with(mixed ...$parameters): this {
-
-		// TBD validate parameters
+		// TODO validate parameters
 		return $this;
 	}
 
 	public function andReturn(mixed $return_value): this {
 		$this->return_type = \gettype($return_value);
 
-		$reg = \Usox\HackMock\Mock::getRegistry()[$this->getMethodName()] = $return_value;
+		\Usox\HackMock\Mock::getRegistry()[$this->getMethodName()] = $return_value;
+
+		return $this;
+	}
+
+	public function andThrow(\Throwable $e): this {
+		\Usox\HackMock\Mock::getThrowableRegistry()[$this->getMethodName()] = $e;
 
 		return $this;
 	}

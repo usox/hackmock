@@ -14,6 +14,8 @@ final class Mock<TC> implements MockInterface {
 
 	private static Map<string, mixed> $registry = Map{};
 
+	private static Map<string, \Throwable> $throwable_registry = Map{};
+
 	public function __construct(private classname<TC> $interface_name): void {
 		$this->code_generator = new HackCodegenFactory(new HackCodegenConfig());
 	}
@@ -62,6 +64,15 @@ final class Mock<TC> implements MockInterface {
 			if (C\contains_key($this->expectations, $method_name)) {
 				$expectation = $this->expectations[$method_name];
 
+				if (C\contains_key(static::getThrowableRegistry(), $method_name)) {
+					$gen_method->setBodyf(
+						'throw \%s::getThrowableRegistry()[\'%s\'];',
+						__CLASS__,
+						$expectation->getMethodName()
+					);
+					continue;
+				}
+
 				$gen_method->setBodyf(
 					'return \%s::getRegistry()[\'%s\'] ?? null;',
 					__CLASS__,
@@ -75,7 +86,6 @@ final class Mock<TC> implements MockInterface {
 			);
 		}
 
-
 		// UNSAFE
 		eval($class->render());
 
@@ -86,20 +96,7 @@ final class Mock<TC> implements MockInterface {
 		return static::$registry;
 	}
 
-	private function addMethod(CodegenClass $class, ExpectationInterface $expectation): void {
-		$class->addMethod(
-			$this->code_generator->codegenMethod(
-				$expectation->getMethodName()
-			)
-			->addParameter('mixed ...$params')
-			->setReturnType(
-				$expectation->getReturnType()
-			)
-			->setBodyf(
-				'return \%s::getRegistry()[\'%s\'];',
-				__CLASS__,
-				$expectation->getMethodName()
-			)
-		);
+	public static function getThrowableRegistry(): Map<string, \Throwable> {
+		return static::$throwable_registry;
 	}
 }

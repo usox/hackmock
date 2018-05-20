@@ -12,6 +12,8 @@ interface ExpectationInterface {
 
 	public function andReturn(mixed $return_value): this;
 
+	public function andThrow(\Throwable $e): this;
+
 	public function getMethodName(): string;
 
 	public function getReturnType(): string;
