@@ -29,8 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Usox\\HackMock\\": "src/",
-            "Usox\\Fickel\\": "tests/"
+            "Usox\\HackMock\\": "src/"
         }
     }
 }
