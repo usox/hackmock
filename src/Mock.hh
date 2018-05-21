@@ -20,12 +20,6 @@ final class Mock<TC> implements MockInterface {
 		$this->code_generator = new HackCodegenFactory(new HackCodegenConfig());
 	}
 
-	public function expects(string $method_name): ExpectationInterface {
-		$expectation = new Expectation($method_name);
-		$this->expectations[$method_name] = $expectation;
-		return $expectation;
-	}
-
 	public function build(): TC {
 		$rfl = new \ReflectionClass($this->interface_name);
 
@@ -41,15 +35,17 @@ final class Mock<TC> implements MockInterface {
 			)
 			->addEmptyUserAttribute('__MockClass');
 
-			foreach ($rfl->getMethods() as $method) {
+		foreach ($rfl->getMethods() as $method) {
 			$method_name = $method->getName();
 
 			$gen_method = $this
 				->code_generator
-				->codegenMethod(
+				->codegenMethod($method_name)
+				->setReturnType('mixed')
+				->setBodyf(
+					'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', func_get_args());',
 					$method_name
-				)
-				->setReturnType('mixed');
+				);
 
 			foreach ($method->getParameters() as $parameter) {
 				$gen_method->addParameterf(
@@ -60,24 +56,11 @@ final class Mock<TC> implements MockInterface {
 			}
 
 			$class->addMethod($gen_method);
-
-			$gen_method->setBodyf(
-				'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', func_get_args());',
-				$method_name
-			);
 		}
 
 		// UNSAFE
 		eval($class->render());
 
 		return new $mock_name();
-	}
-
-	public static function getRegistry(): Map<string, mixed> {
-		return static::$registry;
-	}
-
-	public static function getThrowableRegistry(): Map<string, \Throwable> {
-		return static::$throwable_registry;
 	}
 }
