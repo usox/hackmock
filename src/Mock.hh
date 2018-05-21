@@ -61,28 +61,9 @@ final class Mock<TC> implements MockInterface {
 
 			$class->addMethod($gen_method);
 
-			if (C\contains_key($this->expectations, $method_name)) {
-				$expectation = $this->expectations[$method_name];
-
-				if (C\contains_key(static::getThrowableRegistry(), $method_name)) {
-					$gen_method->setBodyf(
-						'throw \%s::getThrowableRegistry()[\'%s\'];',
-						__CLASS__,
-						$expectation->getMethodName()
-					);
-					continue;
-				}
-
-				$gen_method->setBodyf(
-					'return \%s::getRegistry()[\'%s\'] ?? null;',
-					__CLASS__,
-					$expectation->getMethodName()
-				);
-
-				continue;
-			}
 			$gen_method->setBodyf(
-				'return null;'
+				'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', func_get_args());',
+				$method_name
 			);
 		}
 

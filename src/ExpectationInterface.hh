@@ -16,5 +16,5 @@ interface ExpectationInterface {
 
 	public function getMethodName(): string;
 
-	public function getReturnType(): string;
+	public function execute(array<mixed> $method_params): mixed;
 }

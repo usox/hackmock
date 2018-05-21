@@ -6,9 +6,9 @@ use Facebook\HackCodegen\CodegenMethod;
 
 final class Expectation implements ExpectationInterface {
 
-	private string $return_type = '';
-
 	private mixed $return_value;
+
+	private ?\Throwable $throws;
 
 	public function __construct(private string $method_name): void {
 	}
@@ -24,15 +24,13 @@ final class Expectation implements ExpectationInterface {
 	}
 
 	public function andReturn(mixed $return_value): this {
-		$this->return_type = \gettype($return_value);
-
-		\Usox\HackMock\Mock::getRegistry()[$this->getMethodName()] = $return_value;
+		$this->return_value = $return_value;
 
 		return $this;
 	}
 
 	public function andThrow(\Throwable $e): this {
-		\Usox\HackMock\Mock::getThrowableRegistry()[$this->getMethodName()] = $e;
+		$this->throws = $e;
 
 		return $this;
 	}
@@ -41,7 +39,11 @@ final class Expectation implements ExpectationInterface {
 		return $this->method_name;
 	}
 
-	public function getReturnType(): string {
-		return $this->return_type;
+	public function execute(array<mixed> $method_params): mixed {
+		if ($this->throws !== null) {
+			throw $this->throws;
+		}
+
+		return $this->return_value;
 	}
 }
