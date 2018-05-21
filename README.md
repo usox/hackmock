@@ -4,6 +4,8 @@
 
 Creating mock objects for hacklang - yes, seriously.
 
+It's strongly recommended not to use this in any sort of production environment.
+
 ## What works?
 - Strict mode
 - Creating mocks of interfaces
@@ -15,7 +17,7 @@ Creating mock objects for hacklang - yes, seriously.
 ## But I want to try
 Ok.
 
-```
+```php
 use Usox\HackMock\{mock, prospect};
 
 $my_fine_class = mock(SomeInterface::class);
