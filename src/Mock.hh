@@ -8,13 +8,7 @@ use HH\Lib\{Str, Dict, C};
 
 final class Mock<TC> implements MockInterface {
 
-	private dict<string, ExpectationInterface> $expectations = dict[];
-
 	private HackCodegenFactory $code_generator;
-
-	private static Map<string, mixed> $registry = Map{};
-
-	private static Map<string, \Throwable> $throwable_registry = Map{};
 
 	public function __construct(private classname<TC> $interface_name): void {
 		$this->code_generator = new HackCodegenFactory(new HackCodegenConfig());
