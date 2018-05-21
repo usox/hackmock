@@ -14,7 +14,5 @@ interface ExpectationInterface {
 
 	public function andThrow(\Throwable $e): this;
 
-	public function getMethodName(): string;
-
 	public function execute(array<mixed> $method_params): mixed;
 }

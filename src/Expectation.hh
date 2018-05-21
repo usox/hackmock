@@ -35,10 +35,6 @@ final class Expectation implements ExpectationInterface {
 		return $this;
 	}
 
-	public function getMethodName(): string {
-		return $this->method_name;
-	}
-
 	public function execute(array<mixed> $method_params): mixed {
 		if ($this->throws !== null) {
 			throw $this->throws;
