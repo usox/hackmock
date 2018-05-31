@@ -36,7 +36,7 @@ function processExpectation(
 
 	globalState()->remove($mock_class_name . '_' . $method_name);
 
-	return $expectation->execute($params);
+	return $expectation->execute(vec($params));
 }
 
 function tearDown(): void {

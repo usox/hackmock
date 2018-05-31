@@ -40,9 +40,9 @@ final class Expectation implements ExpectationInterface {
 		return $this;
 	}
 
-	public function execute(array<mixed> $method_params): mixed {
+	public function execute(vec<mixed> $method_params): mixed {
 		if (C\count($this->parameters) > 0) {
-			$this->validateParams(vec($method_params));
+			$this->validateParams($method_params);
 		}
 
 		if ($this->throws !== null) {
