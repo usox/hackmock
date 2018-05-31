@@ -73,4 +73,36 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 		)
 		->toBeInstanceOf(SampleInterface::class);
 	}
+
+	public function testParamsValidationSucceeds(): void {
+		$sample = mock(SampleInterface::class);
+		$int = 1234;
+		$string = 'string';
+		$float = 1.23;
+		$class = new \stdClass();
+
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->andReturn(null);
+
+		expect(
+			$sample->basicParamValidation($int, $string, $float, $class)
+		)
+		->toBeNull();
+	}
+
+	public function testParamsValidationFails(): void {
+		$sample = mock(SampleInterface::class);
+
+		prospect($sample, 'basicParamValidation')
+			->with(1234, 'string', 6.66)
+			->andReturn(null);
+
+		expect(
+			function() use ($sample) {
+				$sample->basicParamValidation(5678, 'nostring', 4.2, new \stdClass());
+			}
+		)
+		->toThrow(\Exception::class);
+	}
 }

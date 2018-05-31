@@ -11,4 +11,6 @@ interface SampleInterface {
 	public function noParamsButReturnsString(): string;
 
 	public function noParamsButReturnsSampleInterfaceInstance(): SampleInterface;
+
+	public function basicParamValidation(int $int, string $string, float $float, \stdClass $class): mixed;
 }

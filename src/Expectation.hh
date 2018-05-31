@@ -3,10 +3,14 @@ namespace Usox\HackMock;
 
 use Facebook\HackCodegen\HackCodegenFactory;
 use Facebook\HackCodegen\CodegenMethod;
+use function Facebook\FBExpect\expect;
+use HH\Lib\C;
 
 final class Expectation implements ExpectationInterface {
 
-	private mixed $return_value;
+	private mixed $return_value = null;
+
+	private vec<mixed> $parameters = vec[];
 
 	private ?\Throwable $throws;
 
@@ -19,7 +23,8 @@ final class Expectation implements ExpectationInterface {
 	}
 
 	public function with(mixed ...$parameters): this {
-		// TODO validate parameters
+		$this->parameters = vec($parameters);
+
 		return $this;
 	}
 
@@ -36,10 +41,23 @@ final class Expectation implements ExpectationInterface {
 	}
 
 	public function execute(array<mixed> $method_params): mixed {
+		if (C\count($this->parameters) > 0) {
+			$this->validateParams(vec($method_params));
+		}
+
 		if ($this->throws !== null) {
 			throw $this->throws;
 		}
 
 		return $this->return_value;
+	}
+
+	private function validateParams(vec<mixed> $method_params): void {
+		expect(
+			$method_params
+		)
+		->toBeSame(
+			$this->parameters
+		);
 	}
 }
