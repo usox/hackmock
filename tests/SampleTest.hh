@@ -1,7 +1,7 @@
 <?hh // strict
 
 use function Facebook\FBExpect\expect;
-use function Usox\HackMock\{mock, prospect};
+use function Usox\HackMock\{mock, prospect, tearDown};
 
 class SampleTest extends \PHPUnit_Framework_TestCase {
 
@@ -104,5 +104,24 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 			}
 		)
 		->toThrow(\Exception::class);
+	}
+
+	public function testMissingMethodCall(): void {
+		$sample = mock(SampleInterface::class);
+
+		$return_value = 'some-return-value';
+		
+		prospect($sample, 'noParamsButReturnsString')
+			->andReturn($return_value);
+
+		expect(
+			function() {
+				tearDown();
+			}
+		)
+		->toThrow(
+			Usox\HackMock\Exception\MissingMethodCallException::class,
+			'Expected method call `noParamsButReturnsString`'
+		);
 	}
 }

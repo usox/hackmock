@@ -1,6 +1,8 @@
 <?hh // strict
 namespace Usox\HackMock;
 
+use HH\Lib\{C, Str};
+
 function mock<Tcn>(classname<Tcn> $class_name): Tcn {
 	return new Mock($class_name)->build();
 }
@@ -32,5 +34,20 @@ function processExpectation(
 		return null;
 	}
 
+	globalState()->remove($mock_class_name . '_' . $method_name);
+
 	return $expectation->execute($params);
+}
+
+function tearDown(): void {
+	if (C\count(globalState()) > 0) {
+		$state = C\first(globalState());
+
+		throw new Exception\MissingMethodCallException(
+			Str\format(
+				'Expected method call `%s`',
+				(string) $state?->getMethodName()
+			)
+		);
+	} 
 }

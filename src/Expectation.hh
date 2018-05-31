@@ -52,6 +52,10 @@ final class Expectation implements ExpectationInterface {
 		return $this->return_value;
 	}
 
+	public function getMethodName(): string {
+		return $this->method_name;
+	}
+
 	private function validateParams(vec<mixed> $method_params): void {
 		expect(
 			$method_params

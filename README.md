@@ -28,3 +28,6 @@ prospect($my_fine_class, 'someMethodName)
 prospect($my_fine_class, 'someOtherMethodName')
   ->andThrow(new \Exception('foobar'));
 ```
+
+## No testlistener support
+So don't forget to call `Usox\HackMock\tearDown()` after every test (just use the `tearDown` functionality of phpunit).
