@@ -9,7 +9,7 @@ It's strongly recommended not to use this in any sort of production environment.
 ## What works?
 - Strict mode
 - Creating mocks of interfaces
-- Defining method expectations (just the return value and throwing Throwables)
+- Defining basic method expectations (parameter validation, return value definition)
 
 ## What does not work?
 - Everything else.
