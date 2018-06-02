@@ -29,25 +29,47 @@ function processExpectation(
 	string $method_name,
 	array<mixed> $params
 ): mixed {
-	$expectation = globalState()[$mock_class_name . '_' . $method_name] ?? null;
-	if ($expectation === null) {
-		return null;
-	}
+	$state = globalState();
+	$identifier = Str\format(
+		'%s_%s',
+		$mock_class_name,
+		$method_name
+	);
 
-	globalState()->remove($mock_class_name . '_' . $method_name);
+	$expectation = $state[$identifier] ?? null;
+	if ($expectation === null) {
+		throw new Exception\UnexpectedMethodCallException(
+			Str\format(
+				'No expectation defnied for `%s::%s`',
+				$mock_class_name,
+				$method_name
+			)
+		);
+	}
 
 	return $expectation->execute(vec($params));
 }
 
 function tearDown(): void {
-	if (C\count(globalState()) > 0) {
-		$state = C\first(globalState());
+	$state = C\find(
+		globalState(),
+		($expectation) ==> {
+			return $expectation->isActive();
+		}
+	);
 
+	clearGlobalState();
+
+	if ($state !== null) {
 		throw new Exception\MissingMethodCallException(
 			Str\format(
 				'Expected method call `%s`',
-				(string) $state?->getMethodName()
+				$state->getMethodName()
 			)
 		);
-	} 
+	}
+}
+
+function clearGlobalState(): void {
+	globalState()->clear();
 }

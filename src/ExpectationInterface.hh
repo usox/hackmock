@@ -17,4 +17,6 @@ interface ExpectationInterface {
 	public function execute(vec<mixed> $method_params): mixed;
 
 	public function getMethodName(): string;
+
+	public function isActive(): bool;
 }
