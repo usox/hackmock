@@ -22,7 +22,7 @@ use Usox\HackMock\{mock, prospect};
 
 $my_fine_class = mock(SomeInterface::class);
 
-prospect($my_fine_class, 'someMethodName)
+prospect($my_fine_class, 'someMethodName')
   ->times(1)
   ->andReturn('some-fine-value');
 
