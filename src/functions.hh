@@ -40,7 +40,7 @@ function processExpectation(
 	if ($expectation === null) {
 		throw new Exception\UnexpectedMethodCallException(
 			Str\format(
-				'No expectation defnied for `%s::%s`',
+				'No expectation defined for `%s::%s`',
 				$mock_class_name,
 				$method_name
 			)
