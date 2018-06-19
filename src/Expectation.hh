@@ -86,11 +86,14 @@ final class Expectation implements ExpectationInterface {
 	}
 
 	private function validateParams(vec<mixed> $method_params): void {
-		expect(
-			$method_params
-		)
-		->toBeSame(
-			$this->parameters
-		);
+		foreach ($method_params as $key => $param) {
+
+			$param_expectation = $this->parameters[$key];
+			if (\is_callable($param_expectation)) {
+				expect(\call_user_func($param_expectation, $param))->toBeTrue();
+			} else {
+				expect($param)->toBeSame($param_expectation);
+			}
+		}
 	}
 }

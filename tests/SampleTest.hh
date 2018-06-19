@@ -107,6 +107,21 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 		tearDown();
 	}
 
+	public function testParameterValidationWithClosure(): void {
+		$string = 'some-string';
+
+		$sample = mock(SampleInterface::class);
+		prospect($sample, 'paramValidationWithClosure')
+			->with((string $value) ==> $string === $string)
+			->times(1)
+			->andReturn(null);
+
+		expect(
+			$sample->paramValidationWithClosure($string)
+		)
+		->toBeNull();
+	}
+
 	public function testParamsValidationFails(): void {
 		$sample = mock(SampleInterface::class);
 
