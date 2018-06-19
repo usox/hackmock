@@ -4,7 +4,7 @@ namespace Usox\HackMock;
 use HH\Lib\{C, Str};
 
 function mock<Tcn>(classname<Tcn> $class_name): Tcn {
-	return new Mock($class_name)->build();
+	return (new Mock($class_name))->build();
 }
 
 function prospect<TC>(TC $class, string $method_name): ExpectationInterface {
