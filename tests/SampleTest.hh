@@ -175,4 +175,34 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 
 		tearDown();
 	}
+
+	public function testNoParamsAndVoidOnBaseClass(): void {
+		$sample = mock(SampleBaseClass::class);
+		
+		prospect($sample, 'noParamsAndVoid')
+			->times(1);
+
+		$sample->noParamsAndVoid();
+
+		tearDown();
+	}
+
+	public function testIntParamAndIntReturnValueOnBaseClass(): void {
+		$sample = mock(SampleBaseClass::class);
+
+		$int1 = 666;
+		$int2 = 777;
+		
+		prospect($sample, 'intParamAndReturnsInt')
+			->with($int1)
+			->times(1)
+			->andReturn($int2);
+
+		expect(
+			$sample->intParamAndReturnsInt($int1)
+		)
+		->toBeSame($int2);
+
+		tearDown();
+	}
 }

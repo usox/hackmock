@@ -23,11 +23,17 @@ final class Mock<TC> implements MockInterface {
 			\spl_object_hash($this)
 		);
 
-		$class = $this->code_generator->codegenClass($mock_name)
-			->addInterface(
-				$this->code_generator->codegenImplementsInterface($rfl->getName())
-			)
-			->addEmptyUserAttribute('__MockClass');
+		if ($rfl->isInterface()) {
+			$class = $this->code_generator->codegenClass($mock_name)
+				->addInterface(
+					$this->code_generator->codegenImplementsInterface($rfl->getName())
+				)
+				->addEmptyUserAttribute('__MockClass');
+		} else {
+			$class = $this->code_generator->codegenClass($mock_name)
+				->setExtends($rfl->getName())
+				->addEmptyUserAttribute('__MockClass');
+		}
 
 		foreach ($rfl->getMethods() as $method) {
 			$method_name = $method->getName();
