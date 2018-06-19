@@ -19,9 +19,9 @@
         }
     ],
     "require": {
-        "hhvm": ">=3.26.0",
+        "hhvm": ">=3.27",
         "facebook/hack-codegen": "^3",
-        "hhvm/hsl": "^3.26",
+        "hhvm/hsl": "^3.27",
         "hhvm/type-assert": "^3.2"
     },
     "require-dev": {
