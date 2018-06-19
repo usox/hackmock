@@ -42,11 +42,20 @@ final class Mock<TC> implements MockInterface {
 				);
 
 			foreach ($method->getParameters() as $parameter) {
-				$gen_method->addParameterf(
-					'%s $%s',
-					$parameter->getTypehintText(),
-					$parameter->getName(),
-				);
+				if ($parameter->isDefaultValueAvailable() === true) {
+					$gen_method->addParameterf(
+						'%s $%s = %s',
+						$parameter->getTypehintText(),
+						$parameter->getName(),
+						$parameter->getDefaultValue()
+					);
+				} else {
+					$gen_method->addParameterf(
+						'%s $%s',
+						$parameter->getTypehintText(),
+						$parameter->getName(),
+					);
+				}
 			}
 
 			$class->addMethod($gen_method);
