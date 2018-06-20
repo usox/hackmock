@@ -1,7 +1,9 @@
 <?hh // strict
 
+use HH\Lib\Str;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect, tearDown};
+use Usox\HackMock\Exception\{MissingMethodCallException, UnexpectedMethodCallException};
 
 class SampleTest extends \PHPUnit_Framework_TestCase {
 
@@ -107,6 +109,85 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 		tearDown();
 	}
 
+	public function testParamsValidationSucceedsTwoTimesInRow(): void {
+		$sample = mock(SampleInterface::class);
+		$int = 1234;
+		$string = 'string';
+		$float = 1.23;
+		$class = new \stdClass();
+
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(1)
+			->andReturn(null);
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(1)
+			->andReturn(null);
+
+		$sample->basicParamValidation($int, $string, $float, $class);
+		$sample->basicParamValidation($int, $string, $float, $class);
+
+		tearDown();
+	}
+
+	public function testParamsValidationSucceedsWithDifferentCallCounts(): void {
+		$sample = mock(SampleInterface::class);
+		$int = 1234;
+		$string = 'string';
+		$float = 1.23;
+		$class = new \stdClass();
+
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(2)
+			->andReturn(null);
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(1)
+			->andReturn(null);
+
+		$sample->basicParamValidation($int, $string, $float, $class);
+		$sample->basicParamValidation($int, $string, $float, $class);
+		$sample->basicParamValidation($int, $string, $float, $class);
+
+		tearDown();
+	}
+
+	public function testParamsValidationFailesWithDifferentCallCountsButOneWrongParameter(): void {
+		$sample = mock(SampleInterface::class);
+		$int = 1234;
+		$string = 'string';
+		$float = 1.23;
+		$class = new \stdClass();
+
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(2)
+			->andReturn(null);
+		prospect($sample, 'basicParamValidation')
+			->with($int, $string, $float, $class)
+			->times(1)
+			->andReturn(null);
+
+		expect(
+			() ==> {
+				$sample->basicParamValidation($int, $string, $float, $class);
+				$sample->basicParamValidation($int, $string, $float, $class);
+				$sample->basicParamValidation($int, $string, 6.66, $class);
+			}
+		)
+		->toThrow(
+			UnexpectedMethodCallException::class,
+			Str\format(
+				'No expectation defined for `%s::basicParamValidation` with parameter `1234,string,6.66,stdClass`',
+				\get_class($sample)
+			)
+		);
+
+		tearDown();
+	}
+
 	public function testParameterValidationWithClosure(): void {
 		$string = 'some-string';
 
@@ -133,7 +214,10 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 		expect(
 			() ==> $sample->basicParamValidation(5678, 'nostring', 4.2, new \stdClass())
 		)
-		->toThrow(\Exception::class);
+		->toThrow(
+			UnexpectedMethodCallException::class,
+			Str\format('No expectation defined for `%s::basicParamValidation` with parameter `5678,nostring,4.2,stdClass`', \get_class($sample))
+		);
 
 		tearDown();
 	}
@@ -149,8 +233,8 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 
 		expect(() ==> tearDown())
 		->toThrow(
-			Usox\HackMock\Exception\MissingMethodCallException::class,
-			'Expected method call `noParamsButReturnsString`'
+			MissingMethodCallException::class,
+			'Expected method call `noParamsButReturnsString` with parameters ``'
 		);
 	}
 
@@ -169,8 +253,7 @@ class SampleTest extends \PHPUnit_Framework_TestCase {
 			}
 		)
 		->toThrow(
-			Usox\HackMock\Exception\MethodCallCountException::class,
-			'Method `noParamsButReturnsString` is not expected to be called more then 1 times'
+			Usox\HackMock\Exception\UnexpectedMethodCallException::class
 		);
 
 		tearDown();

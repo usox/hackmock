@@ -4,7 +4,7 @@ namespace Usox\HackMock;
 use Facebook\HackCodegen\HackCodegenFactory;
 use Facebook\HackCodegen\CodegenMethod;
 use function Facebook\FBExpect\expect;
-use HH\Lib\{C, Str};
+use HH\Lib\{C, Str, Vec};
 
 final class Expectation implements ExpectationInterface {
 
@@ -85,15 +85,25 @@ final class Expectation implements ExpectationInterface {
 		return $this->times_to_call > $this->call_counter;
 	}
 
-	private function validateParams(vec<mixed> $method_params): void {
+	public function validateParams(vec<mixed> $method_params): void {
 		foreach ($method_params as $key => $param) {
 
 			$param_expectation = $this->parameters[$key];
 			if (\is_callable($param_expectation)) {
-				expect(\call_user_func($param_expectation, $param))->toBeTrue();
+				invariant(
+					\call_user_func($param_expectation, $param),
+					'Parameter validation failed'
+				);
 			} else {
-				expect($param)->toBeSame($param_expectation);
+				invariant(
+					$param == $param_expectation,
+					'Parameter validation failed'
+				);
 			}
 		}
+	}
+
+	public function getParameters(): vec<mixed> {
+		return $this->parameters;
 	}
 }

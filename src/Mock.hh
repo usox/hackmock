@@ -43,7 +43,7 @@ final class Mock<TC> implements MockInterface {
 				->codegenMethod($method_name)
 				->setReturnType('mixed')
 				->setBodyf(
-					'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', func_get_args());',
+					'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', vec(func_get_args()));',
 					$method_name
 				);
 

@@ -19,4 +19,8 @@ interface ExpectationInterface {
 	public function getMethodName(): string;
 
 	public function isActive(): bool;
+
+	public function validateParams(vec<mixed> $params): void;
+
+	public function getParameters(): vec<mixed>;
 }
