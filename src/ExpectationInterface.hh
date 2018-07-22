@@ -1,12 +1,11 @@
 <?hh // strict
 namespace Usox\HackMock;
 
-use Facebook\HackCodegen\HackCodegenFactory;
-use Facebook\HackCodegen\CodegenMethod;
-
 interface ExpectationInterface {
 
 	public function times(int $times_called): this;
+
+	public function once(): this;
 
 	public function with(mixed ...$parameters): this;
 

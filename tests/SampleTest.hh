@@ -5,7 +5,7 @@ use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect, tearDown};
 use Usox\HackMock\Exception\{MissingMethodCallException, UnexpectedMethodCallException};
 
-class SampleTest extends \PHPUnit_Framework_TestCase {
+class SampleTest extends \Facebook\HackTest\HackTestCase {
 
 	public function testNoParamsAndVoid(): void {
 		$sample = mock(SampleInterface::class);

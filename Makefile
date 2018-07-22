@@ -1,3 +1,3 @@
 tests:force
-	hhvm vendor/bin/phpunit --stderr tests
+	hhvm vendor/bin/hacktest tests
 force:

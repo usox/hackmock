@@ -1,10 +1,7 @@
 <?hh // strict
 namespace Usox\HackMock;
 
-use Facebook\HackCodegen\HackCodegenFactory;
-use Facebook\HackCodegen\CodegenMethod;
-use function Facebook\FBExpect\expect;
-use HH\Lib\{C, Str, Vec};
+use namespace HH\Lib\{C, Str};
 
 final class Expectation implements ExpectationInterface {
 
@@ -23,6 +20,12 @@ final class Expectation implements ExpectationInterface {
 
 	public function times(int $times_to_call): this {
 		$this->times_to_call = $times_to_call;
+
+		return $this;
+	}
+
+	public function once(): this {
+		$this->times(1);
 
 		return $this;
 	}
@@ -54,7 +57,7 @@ final class Expectation implements ExpectationInterface {
 
 		if ($this->times_to_call !== null) {
 			if ($this->times_to_call < $this->call_counter) {
-				clearGlobalState();
+				clear_global_state();
 
 				throw new Exception\MethodCallCountException(
 					Str\format(
@@ -96,7 +99,7 @@ final class Expectation implements ExpectationInterface {
 				);
 			} else {
 				invariant(
-					$param == $param_expectation,
+					$param === $param_expectation,
 					'Parameter validation failed'
 				);
 			}

@@ -1,7 +1,7 @@
 <?hh // strict
 namespace Usox\HackMock;
 
-use HH\Lib\{C, Str, Vec};
+use namespace HH\Lib\{C, Str, Vec};
 
 function mock<Tcn>(classname<Tcn> $class_name): Tcn {
 	return (new Mock($class_name))->build();
@@ -12,16 +12,16 @@ function prospect<TC>(TC $class, string $method_name): ExpectationInterface {
 
 	$identifier = Str\format('%s_%s', \get_class($class), $method_name);
 
-	if (globalState() |> C\contains_key($$, $identifier)) {
-		globalState()[\get_class($class) . '_' . $method_name][] = $expectation;
+	if (global_state() |> C\contains_key($$, $identifier)) {
+		global_state()[\get_class($class) . '_' . $method_name][] = $expectation;
 	} else {
-		globalState()[\get_class($class) . '_' . $method_name] = vec[$expectation];
+		global_state()[\get_class($class) . '_' . $method_name] = vec[$expectation];
 	}
 
 	return $expectation;
 }
 
-function globalState(): Map<string, vec<ExpectationInterface>> {
+function global_state(): Map<string, vec<ExpectationInterface>> {
 	static $global_state = null;
 	if ($global_state === null) {
 		$global_state = Map{};
@@ -30,12 +30,12 @@ function globalState(): Map<string, vec<ExpectationInterface>> {
 	return $global_state;
 }
 
-function processExpectation(
+function process_expectation(
 	string $mock_class_name,
 	string $method_name,
 	vec<mixed> $params
 ): mixed {
-	$state = globalState();
+	$state = global_state();
 	$identifier = Str\format(
 		'%s_%s',
 		$mock_class_name,
@@ -44,7 +44,7 @@ function processExpectation(
 
 	$expectations = $state[$identifier] ?? null;
 	if ($expectations === null) {
-		clearGlobalState();
+		clear_global_state();
 
 		throw new Exception\UnexpectedMethodCallException(
 			Str\format(
@@ -68,7 +68,7 @@ function processExpectation(
 		}
 	}
 
-	clearGlobalState();
+	clear_global_state();
 
 	throw new Exception\UnexpectedMethodCallException(
 		vec_to_string($params) |> Str\format(
@@ -98,7 +98,7 @@ function vec_to_string(vec<mixed> $data): string {
 
 function tearDown(): void {
 	$state = C\find(
-		globalState(),
+		global_state(),
 		(vec<ExpectationInterface> $expectations) ==> {
 			foreach ($expectations as $expectation) {
 				return $expectation->isActive();
@@ -107,7 +107,7 @@ function tearDown(): void {
 		}
 	);
 
-	clearGlobalState();
+	clear_global_state();
 
 	if ($state !== null) {
 		$expectation = C\first($state);
@@ -123,6 +123,6 @@ function tearDown(): void {
 	}
 }
 
-function clearGlobalState(): void {
-	globalState()->clear();
+function clear_global_state(): void {
+	global_state()->clear();
 }

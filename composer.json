@@ -22,10 +22,12 @@
         "hhvm": ">=3.27",
         "facebook/hack-codegen": "^3",
         "hhvm/hsl": "^3.27",
-        "hhvm/type-assert": "^3.2"
+        "hhvm/type-assert": "^3.2",
+        "hhvm/hhast": "^3.27"
     },
     "require-dev": {
-        "facebook/fbexpect": "^1"
+        "facebook/fbexpect": "^1",
+        "hhvm/hacktest": "^0"
     },
     "autoload": {
         "psr-4": {

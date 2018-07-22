@@ -1,10 +1,9 @@
 <?hh // strict
 namespace Usox\HackMock;
 
-use Facebook\HackCodegen\CodegenClass;
-use Facebook\HackCodegen\HackCodegenFactory;
-use Facebook\HackCodegen\HackCodegenConfig;
-use HH\Lib\{Str, Dict, C};
+use type Facebook\HackCodegen\HackCodegenFactory;
+use type Facebook\HackCodegen\HackCodegenConfig;
+use namespace HH\Lib\{Str};
 
 final class Mock<TC> implements MockInterface {
 
@@ -43,7 +42,7 @@ final class Mock<TC> implements MockInterface {
 				->codegenMethod($method_name)
 				->setReturnType('mixed')
 				->setBodyf(
-					'return \Usox\HackMock\processExpectation(__CLASS__, \'%s\', vec(func_get_args()));',
+					'return \Usox\HackMock\process_expectation(__CLASS__, \'%s\', vec(func_get_args()));',
 					$method_name
 				);
 
