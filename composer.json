@@ -26,7 +26,7 @@
         "hhvm/hhast": "^3.27"
     },
     "require-dev": {
-        "facebook/fbexpect": "^1",
+        "facebook/fbexpect": "^2",
         "hhvm/hacktest": "^0"
     },
     "autoload": {
