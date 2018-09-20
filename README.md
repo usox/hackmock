@@ -18,17 +18,19 @@ It's strongly recommended not to use this in any sort of production environment.
 Ok.
 
 ```php
-use Usox\HackMock\{mock, prospect};
+use function Usox\HackMock\{mock, prospect};
 
-$my_fine_class = mock(SomeInterface::class);
+class SomethingTest extends \Usox\HackMock\HackMock {
 
-prospect($my_fine_class, 'someMethodName')
-  ->times(1)
-  ->andReturn('some-fine-value');
+  public function testSomething() {
+    $my_fine_class = mock(SomeInterface::class);
 
-prospect($my_fine_class, 'someOtherMethodName')
-  ->andThrow(new \Exception('foobar'));
+    prospect($my_fine_class, 'someMethodName')
+      ->times(1)
+      ->andReturn('some-fine-value');
+
+    prospect($my_fine_class, 'someOtherMethodName')
+      ->andThrow(new \Exception('foobar'));
+  }
+}
 ```
-
-## No testlistener support
-So don't forget to call `Usox\HackMock\tearDown()` after every test (just use the `tearDown` functionality of phpunit).

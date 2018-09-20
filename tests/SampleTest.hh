@@ -5,7 +5,7 @@ use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect, tear_down};
 use Usox\HackMock\Exception\{MissingMethodCallException, UnexpectedMethodCallException};
 
-class SampleTest extends \Facebook\HackTest\HackTest {
+class SampleTest extends \Usox\HackMock\HackMock {
 
 	public function testNoParamsAndVoid(): void {
 		$sample = mock(SampleInterface::class);
@@ -14,8 +14,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			->times(1);
 
 		$sample->noParamsAndVoid();
-
-		tear_down();
 	}
 
 	public function testNoParamsAndVoidButThrows(): void {
@@ -34,8 +32,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			\Exception::class,
 			$message
 		);
-
-		tear_down();
 	}
 
 	public function testNoParamsButReturnsInt(): void {
@@ -51,8 +47,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			$sample->noParamsButReturnsInt()
 		)
 		->toBeSame($return_value);
-
-		tear_down();
 	}
 
 	public function testNoParamsButReturnsString(): void {
@@ -68,8 +62,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			$sample->noParamsButReturnsString()
 		)
 		->toBeSame($return_value);
-
-		tear_down();
 	}
 
 	public function testNoParamsButReturnsSampleInterfaceInstance(): void {
@@ -85,8 +77,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			$sample->noParamsButReturnsSampleInterfaceInstance()
 		)
 		->toBeInstanceOf(SampleInterface::class);
-
-		tear_down();
 	}
 
 	public function testParamsValidationSucceeds(): void {
@@ -105,8 +95,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			$sample->basicParamValidation($int, $string, $float, $class)
 		)
 		->toBeNull();
-
-		tear_down();
 	}
 
 	public function testParamsValidationSucceedsTwoTimesInRow(): void {
@@ -127,8 +115,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 
 		$sample->basicParamValidation($int, $string, $float, $class);
 		$sample->basicParamValidation($int, $string, $float, $class);
-
-		tear_down();
 	}
 
 	public function testParamsValidationSucceedsWithDifferentCallCounts(): void {
@@ -150,8 +136,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 		$sample->basicParamValidation($int, $string, $float, $class);
 		$sample->basicParamValidation($int, $string, $float, $class);
 		$sample->basicParamValidation($int, $string, $float, $class);
-
-		tear_down();
 	}
 
 	public function testParamsValidationFailesWithDifferentCallCountsButOneWrongParameter(): void {
@@ -184,8 +168,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 				\get_class($sample)
 			)
 		);
-
-		tear_down();
 	}
 
 	public function testParameterValidationWithClosure(): void {
@@ -218,8 +200,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			UnexpectedMethodCallException::class,
 			Str\format('No expectation defined for `%s::basicParamValidation` with parameter `5678,nostring,4.2,stdClass`', \get_class($sample))
 		);
-
-		tear_down();
 	}
 
 	public function testMissingMethodCall(): void {
@@ -255,8 +235,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 		->toThrow(
 			Usox\HackMock\Exception\UnexpectedMethodCallException::class
 		);
-
-		tear_down();
 	}
 
 	public function testNoParamsAndVoidOnBaseClass(): void {
@@ -266,8 +244,6 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			->times(1);
 
 		$sample->noParamsAndVoid();
-
-		tear_down();
 	}
 
 	public function testIntParamAndIntReturnValueOnBaseClass(): void {
@@ -285,7 +261,5 @@ class SampleTest extends \Facebook\HackTest\HackTest {
 			$sample->intParamAndReturnsInt($int1)
 		)
 		->toBeSame($int2);
-
-		tear_down();
 	}
 }
