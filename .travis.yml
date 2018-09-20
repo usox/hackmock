@@ -11,4 +11,4 @@ before_script: composer install
 
 script:
   - hh_server --check $(pwd)
-  - vendor/bin/phpunit --stderr -c phpunit.xml
+  - vendor/bin/hacktest tests
