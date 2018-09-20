@@ -26,8 +26,8 @@
         "hhvm/hhast": "^3.27"
     },
     "require-dev": {
-        "facebook/fbexpect": "^1",
-        "hhvm/hacktest": "^0"
+        "facebook/fbexpect": "^2",
+        "hhvm/hacktest": "dev-master"
     },
     "autoload": {
         "psr-4": {

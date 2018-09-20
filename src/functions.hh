@@ -96,7 +96,7 @@ function vec_to_string(vec<mixed> $data): string {
 		|> Str\join($$, ',');
 }
 
-function tearDown(): void {
+function tear_down(): void {
 	$state = C\find(
 		global_state(),
 		(vec<ExpectationInterface> $expectations) ==> {
