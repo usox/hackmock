@@ -57,6 +57,8 @@ final class Mock<TC> implements MockInterface {
 				);
 
 			foreach ($method->getParameters() as $parameter) {
+				$return_type_hint = Str\trim((string) $parameter->getType());
+
 				if ($parameter->isDefaultValueAvailable() === true) {
 					if ($parameter->isDefaultValueConstant()) {
 						$gen_method->addParameterf(
@@ -79,12 +81,12 @@ final class Mock<TC> implements MockInterface {
 							if (is_array($default_value)) {
 								$default_value = '[]';
 							}
-							if ($parameter->allowsNull()) {
+							if ($parameter->allowsNull() && !Str\starts_with($return_type_hint, '?')) {
 								$nullable = '?';
 							}
 							$gen_method->addParameterf(
 								'%s%s $%s = %s',
-								(string) $parameter->getType(),
+								$return_type_hint,
 								$nullable,
 								$parameter->getName(),
 								$default_value
@@ -94,15 +96,16 @@ final class Mock<TC> implements MockInterface {
 				} else {
 					$nullable = '';
 					$default = '';
-					$type = Str\trim((string) $parameter->getType());
 					if ($parameter->allowsNull()) {
-						$nullable = '?';
+						if (!Str\starts_with($return_type_hint, '?')) {
+							$nullable = '?';
+						}
 						$default = ' = null';
 					}
 					$gen_method->addParameterf(
 						'%s%s $%s%s',
 						$nullable,
-						$type,
+						$return_type_hint,
 						$parameter->getName(),
 						$default
 					);

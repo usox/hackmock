@@ -19,4 +19,6 @@ interface SampleInterface {
 	public function hasDefaultForParameterBuildsCorrectMock(string $text = 'something'): void;
 
 	public function hasNullAsDefaultForParemterBuildsCorrectMock(?string $text = null): void;
+
+	public function isNullableWithoutDefaultsBuildsCorrectMock(?string $text): void;
 }
