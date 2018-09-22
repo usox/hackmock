@@ -37,10 +37,20 @@ final class Mock<TC> implements MockInterface {
 		foreach ($rfl->getMethods() as $method) {
 			$method_name = $method->getName();
 
+			if ($method_name === '__construct') {
+				$gen_method = $this
+					->code_generator
+					->codegenMethod($method_name)
+					->setReturnType('void');
+				$class->addMethod($gen_method);
+				continue;
+			}
+
 			$gen_method = $this
 				->code_generator
 				->codegenMethod($method_name)
 				->setReturnType('mixed')
+				->setIsStatic($method->isStatic())
 				->setBodyf(
 					'return \Usox\HackMock\process_expectation(__CLASS__, \'%s\', vec(func_get_args()));',
 					$method_name
@@ -64,19 +74,37 @@ final class Mock<TC> implements MockInterface {
 								$parameter->getDefaultValue()
 							);
 						} else {
+							$default_value = $parameter->getDefaultValue();
+							$nullable = '';
+							if (is_array($default_value)) {
+								$default_value = '[]';
+							}
+							if ($parameter->allowsNull()) {
+								$nullable = '?';
+							}
 							$gen_method->addParameterf(
-								'%s $%s = %s',
+								'%s%s $%s = %s',
 								(string) $parameter->getType(),
+								$nullable,
 								$parameter->getName(),
-								$parameter->getDefaultValue()
+								$default_value
 							);
 						}
 					}
 				} else {
+					$nullable = '';
+					$default = '';
+					$type = Str\trim((string) $parameter->getType());
+					if ($parameter->allowsNull()) {
+						$nullable = '?';
+						$default = ' = null';
+					}
 					$gen_method->addParameterf(
-						'%s $%s',
-						$parameter->getTypehintText(),
+						'%s%s $%s%s',
+						$nullable,
+						$type,
 						$parameter->getName(),
+						$default
 					);
 				}
 			}

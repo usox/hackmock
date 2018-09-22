@@ -262,4 +262,14 @@ class SampleTest extends \Usox\HackMock\HackMock {
 		)
 		->toBeSame($int2);
 	}
+
+	public function testIntOrNullWithDefaultOnBaseClass(): void {
+		$sample = mock(SampleBaseClass::class);
+
+		prospect($sample, 'intOrNullWithDefault')
+			->with(55)
+			->once();
+
+		$sample->intOrNullWithDefault(55);
+	}
 }

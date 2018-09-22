@@ -1,6 +1,10 @@
 <?hh // strict
 	
 class SampleBaseClass {
+
+	public function __construct(): void {
+		throw new \Exception('Should never be thrown');
+	}
 	
 	public function noParamsAndVoid(): void {
 
@@ -10,4 +14,10 @@ class SampleBaseClass {
 		return $some_int;
 	}
 
+	public function intOrNullWithDefault(?int $some_int = null): void {
+	}
+
+	public static function someStaticFunction(): void {
+
+	}
 }
