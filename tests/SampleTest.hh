@@ -272,4 +272,18 @@ class SampleTest extends \Usox\HackMock\HackMock {
 
 		$sample->intOrNullWithDefault(55);
 	}
+
+	public function testDuplicateExpectationWorks(): void {
+		$sample = mock(SampleBaseClass::class);
+
+		prospect($sample, 'intOrNullWithDefault')
+			->with(55)
+			->once();
+		prospect($sample, 'intOrNullWithDefault')
+			->with(55)
+			->once();
+
+		$sample->intOrNullWithDefault(55);
+		$sample->intOrNullWithDefault(55);
+	}
 }
