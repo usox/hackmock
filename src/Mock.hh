@@ -81,9 +81,6 @@ final class Mock<TC> implements MockInterface {
 							if (is_array($default_value)) {
 								$default_value = '[]';
 							}
-							if ($parameter->allowsNull() && !Str\starts_with($return_type_hint, '?')) {
-								$nullable = '?';
-							}
 							$gen_method->addParameterf(
 								'%s%s $%s = %s',
 								$return_type_hint,
@@ -97,9 +94,6 @@ final class Mock<TC> implements MockInterface {
 					$nullable = '';
 					$default = '';
 					if ($parameter->allowsNull()) {
-						if (!Str\starts_with($return_type_hint, '?')) {
-							$nullable = '?';
-						}
 						$default = ' = null';
 					}
 					$gen_method->addParameterf(
