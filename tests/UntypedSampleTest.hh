@@ -1,20 +1,17 @@
 <?hh // strict
 
-use HH\Lib\Str;
-use function Facebook\FBExpect\expect;
-use function Usox\HackMock\{mock, prospect, tear_down};
-use Usox\HackMock\Exception\{MissingMethodCallException, UnexpectedMethodCallException};
+use function Usox\HackMock\{mock, prospect};
 
-class UntipedSampleTest extends \Usox\HackMock\HackMock {
-    public function testUntipedParameter(): void {
-        $sample = mock(UntipedSampleBaseClass::class);
+class UntypedSampleTest extends \Usox\HackMock\HackMock {
+    public function testUntypedParameter(): void {
+        $sample = mock(UntypedSampleBaseClass::class);
 
-        prospect($sample, 'untipedParameter')->execute(vec[]);
+        prospect($sample, 'untypedParameter')->execute(vec[]);
     }
 
-    public function testUntipedDefaultParameter(): void {
-        $sample = mock(UntipedSampleBaseClass::class);
+    public function testUntypedDefaultParameter(): void {
+        $sample = mock(UntypedSampleBaseClass::class);
 
-        prospect($sample, 'untipedDefaultParameter')->execute(vec[]);
+        prospect($sample, 'untypedDefaultParameter')->execute(vec[]);
     }
 }
