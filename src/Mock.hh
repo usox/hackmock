@@ -61,11 +61,17 @@ final class Mock<TC> implements MockInterface {
 
 				if ($parameter->isDefaultValueAvailable() === true) {
 					if ($parameter->isDefaultValueConstant()) {
+						/**
+						 * HHVM seems to treat default values for bool
+						 * parameters like constants, php does not.
+						 * @see https://github.com/usox/hackmock/issues/3.
+                         * @see https://github.com/usox/hackmock/pull/4.
+						 */
 						$gen_method->addParameterf(
 							'%s $%s = %s',
 							(string) $parameter->getType(),
 							$parameter->getName(),
-							$parameter->getDefaultValue() === null ? 'null' : $parameter->getDefaultValue()
+							$parameter->getDefaultValueText()
 						);
 					} else {
 						if (Str\contains((string) $parameter->getType(), 'string')) {
