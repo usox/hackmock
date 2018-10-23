@@ -109,9 +109,12 @@ final class Mock<TC> implements MockInterface {
 			$class->addMethod($gen_method);
 		}
 
-		// UNSAFE
+		/* HH_FIXME[2049] **/
+		/* HH_FIXME[4107] **/
 		eval($class->render());
 
+		/* HH_FIXME[4110] **/
+		/* HH_FIXME[4026] **/
 		return new $mock_name();
 	}
 }
