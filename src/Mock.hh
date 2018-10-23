@@ -37,7 +37,7 @@ final class Mock<TC> implements MockInterface {
 		foreach ($rfl->getMethods() as $method) {
 			$method_name = $method->getName();
 
-			if ($method_name === '__construct') {
+			if ($method->isConstructor() || $method->isDestructor()) {
 				$gen_method = $this
 					->code_generator
 					->codegenMethod($method_name)
