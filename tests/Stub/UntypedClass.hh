@@ -1,5 +1,7 @@
 <?hh // decl
 
+namespace Stub;
+
 class UntypedSampleBaseClass {
     public function untypedParameter($param): void {
 
