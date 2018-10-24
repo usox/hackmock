@@ -1,4 +1,6 @@
 <?hh // strict
+
+namespace Stub;
 	
 class SampleBaseClass {
 

@@ -1,5 +1,7 @@
 <?hh // strict
 
+namespace Stub;
+
 interface SampleInterface {
 
 	public function noParamsAndVoid(): void;

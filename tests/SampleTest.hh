@@ -8,7 +8,7 @@ use Usox\HackMock\Exception\{MissingMethodCallException, UnexpectedMethodCallExc
 class SampleTest extends \Usox\HackMock\HackMock {
 
 	public function testNoParamsAndVoid(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		
 		prospect($sample, 'noParamsAndVoid')
 			->times(1);
@@ -17,7 +17,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testNoParamsAndVoidButThrows(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$message = 'some-throwable-message';
 		
@@ -35,7 +35,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testNoParamsButReturnsInt(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$return_value = 666;
 		
@@ -50,7 +50,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testNoParamsButReturnsString(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$return_value = 'some-return-value';
 		
@@ -65,22 +65,22 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testNoParamsButReturnsSampleInterfaceInstance(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$return_value = 'some-return-value';
 
 		prospect($sample, 'noParamsButReturnsSampleInterfaceInstance')
 			->times(1)
-			->andReturn(mock(SampleInterface::class));
+			->andReturn(mock(Stub\SampleInterface::class));
 		
 		expect(
 			$sample->noParamsButReturnsSampleInterfaceInstance()
 		)
-		->toBeInstanceOf(SampleInterface::class);
+		->toBeInstanceOf(Stub\SampleInterface::class);
 	}
 
 	public function testParamsValidationSucceeds(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		$int = 1234;
 		$string = 'string';
 		$float = 1.23;
@@ -98,7 +98,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testParamsValidationSucceedsTwoTimesInRow(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		$int = 1234;
 		$string = 'string';
 		$float = 1.23;
@@ -118,7 +118,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testParamsValidationSucceedsWithDifferentCallCounts(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		$int = 1234;
 		$string = 'string';
 		$float = 1.23;
@@ -139,7 +139,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testParamsValidationFailesWithDifferentCallCountsButOneWrongParameter(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		$int = 1234;
 		$string = 'string';
 		$float = 1.23;
@@ -173,7 +173,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	public function testParameterValidationWithClosure(): void {
 		$string = 'some-string';
 
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 		prospect($sample, 'paramValidationWithClosure')
 			->with((string $value) ==> $string === $string)
 			->times(1)
@@ -186,7 +186,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testParamsValidationFails(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		prospect($sample, 'basicParamValidation')
 			->with(1234, 'string', 6.66)
@@ -203,7 +203,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testMissingMethodCall(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$return_value = 'some-return-value';
 		
@@ -219,7 +219,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testHavingMoreCallsThenExpectationsThrowsException(): void {
-		$sample = mock(SampleInterface::class);
+		$sample = mock(Stub\SampleInterface::class);
 
 		$return_value = 'some-return-value';
 
@@ -238,7 +238,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testNoParamsAndVoidOnBaseClass(): void {
-		$sample = mock(SampleBaseClass::class);
+		$sample = mock(Stub\SampleBaseClass::class);
 		
 		prospect($sample, 'noParamsAndVoid')
 			->times(1);
@@ -247,7 +247,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testIntParamAndIntReturnValueOnBaseClass(): void {
-		$sample = mock(SampleBaseClass::class);
+		$sample = mock(Stub\SampleBaseClass::class);
 
 		$int1 = 666;
 		$int2 = 777;
@@ -264,7 +264,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testIntOrNullWithDefaultOnBaseClass(): void {
-		$sample = mock(SampleBaseClass::class);
+		$sample = mock(Stub\SampleBaseClass::class);
 
 		prospect($sample, 'intOrNullWithDefault')
 			->with(55)
@@ -274,7 +274,7 @@ class SampleTest extends \Usox\HackMock\HackMock {
 	}
 
 	public function testDuplicateExpectationWorks(): void {
-		$sample = mock(SampleBaseClass::class);
+		$sample = mock(Stub\SampleBaseClass::class);
 
 		prospect($sample, 'intOrNullWithDefault')
 			->with(55)
