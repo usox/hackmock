@@ -1,8 +1,6 @@
 <?hh // strict
 namespace Usox\HackMock;
 
-use type Facebook\HackCodegen\HackCodegenFactory;
-use type Facebook\HackCodegen\HackCodegenConfig;
 use namespace HH\Lib\{Str};
 
 final class Mock<TC> implements MockInterface {

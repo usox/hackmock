@@ -5,7 +5,6 @@ namespace Usox\HackMock\Mock;
 use type Facebook\HackCodegen\CodegenClass;
 use type Facebook\HackCodegen\HackCodegenFactory;
 use type Facebook\HackCodegen\HackCodegenConfig;
-use namespace HH\Lib\{Str, Vec};
 
 final class MockBuilder {
 
