@@ -19,19 +19,24 @@
         }
     ],
     "require": {
-        "hhvm": ">=3.30",
+        "hhvm": "^4.0",
         "facebook/hack-codegen": "^4",
-        "hhvm/hsl": "^3.30",
+        "hhvm/hsl": "^4.0",
         "hhvm/type-assert": "^3.2",
-        "facebook/fbexpect": "^2",
-        "hhvm/hacktest": "^1.3"
+        "facebook/fbexpect": "^2.3",
+        "hhvm/hacktest": "^1.4"
     },
     "require-dev": {
-        "hhvm/hhast": "^3.30"
+        "hhvm/hhast": "^4.0"
     },
     "autoload": {
         "psr-4": {
             "Usox\\HackMock\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "hhvm": "4.0.0"
         }
     }
 }
