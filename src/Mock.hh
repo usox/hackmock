@@ -17,14 +17,19 @@ final class Mock<TC> implements MockInterface {
 			\spl_object_hash($this)
 		);
 
-		/* HH_FIXME[2049] **/
-		/* HH_FIXME[4107] **/
-		eval(
+		$name = (string)\microtime(true);
+
+		\file_put_contents(
+			'/tmp/aggi'.$name.'.hack',
 			(new Mock\MockBuilder($rfl))
 			->setName($mock_name)
 			->get()
 			->render()
 		);
+
+		require_once('/tmp/aggi'.$name.'.hack');
+
+		\unlink('/tmp/aggi'.$name.'.hack');
 
 		/* HH_FIXME[4110] **/
 		/* HH_FIXME[4026] **/
