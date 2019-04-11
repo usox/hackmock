@@ -5,6 +5,7 @@ namespace Usox\HackMock\Mock;
 use type Facebook\HackCodegen\CodegenClass;
 use type Facebook\HackCodegen\HackCodegenFactory;
 use type Facebook\HackCodegen\HackCodegenConfig;
+use namespace HH\Lib\Str;
 
 final class MockBuilder {
 
@@ -37,7 +38,7 @@ final class MockBuilder {
 		foreach ($this->class->getMethods() as $method) {
 			$method_name = $method->getName();
 
-			if ($method->isConstructor() || $method->isDestructor()) {
+			if ($method->isConstructor()) {
 				$gen_method = $this
 					->code_generator
 					->codegenMethod($method_name)
@@ -50,11 +51,9 @@ final class MockBuilder {
 				->code_generator
 				->codegenMethod($method_name)
 				->setReturnType('mixed')
-				->setIsStatic($method->isStatic())
-				->setBodyf(
-					'return \Usox\HackMock\process_expectation(__CLASS__, \'%s\', vec(func_get_args()));',
-					$method_name
-				);
+				->setIsStatic($method->isStatic());
+
+			$param_list = [];
 
 			foreach ($method->getParameters() as $param) {
 				foreach ($this->param_generators as $generator) {
@@ -62,7 +61,15 @@ final class MockBuilder {
 						$generator->generate($param, $gen_method);
 					}
 				}
+
+				$param_list[] = '$args[] = $'.$param->getName().';';
 			}
+
+			$gen_method->setBodyf(
+				'$args = vec[]; %s return \Usox\HackMock\process_expectation(__CLASS__, \'%s\', $args);',
+				Str\join($param_list, \PHP_EOL),
+				$method_name,
+			);
 
 			$class->addMethod($gen_method);
 		}
