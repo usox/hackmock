@@ -21,13 +21,12 @@ function prospect<TC>(TC $class, string $method_name): ExpectationInterface {
 	return $expectation;
 }
 
-function global_state(): Map<string, vec<ExpectationInterface>> {
-	static $global_state = null;
-	if ($global_state === null) {
-		$global_state = Map{};
-	}
+abstract final class __GlobalState {
+	public static Map<string, vec<ExpectationInterface>> $globalState = Map{};
+}
 
-	return $global_state;
+function global_state(): Map<string, vec<ExpectationInterface>> {
+	return __GlobalState::$globalState;
 }
 
 function process_expectation(

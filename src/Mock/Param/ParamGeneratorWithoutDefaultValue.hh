@@ -19,7 +19,7 @@ final class ParamGeneratorWithoutDefaultValue implements ParamGeneratorInterface
         }
         $method->addParameterf(
             '%s $%s%s',
-            Str\trim((string) $param->getType()),
+            Str\trim($param->getType()?->__toString() ?? ''),
             $param->getName(),
             $default,
         );

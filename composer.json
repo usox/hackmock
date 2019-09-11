@@ -33,10 +33,5 @@
         "psr-4": {
             "Usox\\HackMock\\": "src/"
         }
-    },
-    "config": {
-        "platform": {
-            "hhvm": "4.1.0"
-        }
     }
 }

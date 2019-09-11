@@ -20,7 +20,7 @@ final class ParamGeneratorDefaultValueWithConstant implements ParamGeneratorInte
          */
         $method->addParameterf(
             '%s $%s = %s',
-            (string) $param->getType(),
+            $param->getType()?->__toString() ?? '',
             $param->getName(),
             $param->getDefaultValueText()
         );

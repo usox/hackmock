@@ -13,7 +13,7 @@ final class ParamGeneratorDefaultValue implements ParamGeneratorInterface {
     }
 
     public function generate(\ReflectionParameter $param, CodegenMethod $method): void {
-        $param_type_hint = Str\trim((string) $param->getType());
+        $param_type_hint = Str\trim($param->getType()?->__toString() ?? '');
         if (Str\contains($param_type_hint, 'string')) {
             $method->addParameterf(
                 '%s $%s = \'%s\'',
