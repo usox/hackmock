@@ -54,7 +54,7 @@ function process_expectation(
 		);
 	}
 
-	foreach ($expectations as $key => $expectation) {
+	foreach ($expectations as $expectation) {
 		try {
 			if ($expectation->isActive() === false) {
 				continue;

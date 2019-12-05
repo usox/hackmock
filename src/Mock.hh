@@ -19,7 +19,7 @@ final class Mock<TC> implements MockInterface {
 
 		/* HH_FIXME[2049] **/
 		/* HH_FIXME[4107] **/
-		eval(
+		\eval(
 			(new Mock\MockBuilder($rfl))
 			->setName($mock_name)
 			->get()

@@ -2,9 +2,7 @@
 
 namespace Usox\HackMock\Mock;
 
-use type Facebook\HackCodegen\CodegenClass;
-use type Facebook\HackCodegen\HackCodegenFactory;
-use type Facebook\HackCodegen\HackCodegenConfig;
+use type Facebook\HackCodegen\{CodegenClass, HackCodegenConfig, HackCodegenFactory};
 use namespace HH\Lib\Str;
 
 final class MockBuilder {
@@ -53,7 +51,7 @@ final class MockBuilder {
 				->setReturnType('mixed')
 				->setIsStatic($method->isStatic());
 
-			$param_list = [];
+			$param_list = varray[];
 
 			foreach ($method->getParameters() as $param) {
 				foreach ($this->param_generators as $generator) {

@@ -94,7 +94,7 @@ final class Expectation implements ExpectationInterface {
 			$param_expectation = $this->parameters[$key];
 			if (\is_callable($param_expectation)) {
 				invariant(
-					\call_user_func($param_expectation, $param),
+					\call_user_func($param_expectation as dynamic, $param),
 					'Parameter validation failed'
 				);
 			} else {
