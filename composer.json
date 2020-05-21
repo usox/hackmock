@@ -22,7 +22,7 @@
         "hhvm": "^4.1",
         "facebook/hack-codegen": "^4",
         "hhvm/hsl": "^4.1",
-        "hhvm/type-assert": "^3.2",
+        "hhvm/type-assert": "^3.2|^4.0",
         "facebook/fbexpect": "^2.3",
         "hhvm/hacktest": "^1.4|^2.0"
     },
