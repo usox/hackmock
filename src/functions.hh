@@ -86,7 +86,7 @@ function vec_to_string(vec<mixed> $data): string {
 				if (\is_object($param)) {
 					return \get_class($param);
 				}
-				if (\is_array($param)) {
+				if ($param is Traversable<_>) {
 					return vec_to_string(vec($param));
 				}
 				return (string) $param;

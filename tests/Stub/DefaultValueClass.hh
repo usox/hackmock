@@ -23,7 +23,7 @@ class DefaultValueClass {
 
     }
 
-    public function defaultNullArray(?array<arraykey, mixed> $param = null): void {
+    public function defaultNullArray(?KeyedContainer<arraykey, mixed> $param = null): void {
 
     }
 

@@ -22,15 +22,11 @@ final class ParamGeneratorDefaultValue implements ParamGeneratorInterface {
                 $param->getDefaultValue(),
             );
         } else {
-            $default_value = $param->getDefaultValue();
-            if (\is_array($default_value)) {
-                $default_value = '[]';
-            }
             $method->addParameterf(
                 '%s $%s = %s',
                 $param_type_hint,
                 $param->getName(),
-                $default_value,
+                $param->getDefaultValueText(),
             );
         }
     }
