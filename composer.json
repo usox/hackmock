@@ -26,6 +26,9 @@
         "facebook/fbexpect": "^2.3",
         "hhvm/hacktest": "^1.4|^2.0"
     },
+    "suggest": {
+        "slack/hack-sql-fake": "Database Testing library for Hacklang"
+    },
     "require-dev": {
         "hhvm/hhast": "^4.1"
     },
